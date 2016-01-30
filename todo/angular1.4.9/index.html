@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8"/>
+    
+    <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
+
+    <title>AngularTodo</title>
+
+    <script>
+     var app = angular.module('todoApp', []);
+
+     app.controller('todoListController', function(){
+       this.todos = [
+	 {"id": 1, "title": "歯医者", "body": "来週の金曜日に歯医者へ行く"},
+	 {"id": 2, "title": "家", "body": "毎日飯を食べる"},
+	 {"id": 3, "title": "スーパー", "body": "納豆を買いに行く"},
+       ];
+
+       /**
+	* todoの追加
+	*
+	* idは本来はWebAPIを想定している為、適当な値を挿入
+	*/
+       this.add = function(){
+	 var newid = this.todos[this.todos.length-1].id + 1;
+	 
+	 this.todos.push({"id":newid, "title": this.title, "body":this.body});
+	 this.title = this.body = "";
+       };
+       
+
+       /**
+	* todoの内容が完了した場合呼ばれる
+	*/
+       this.comp = function(id){
+	 console.log(id);
+
+	 for(var i=0;i<this.todos.length;i++){
+	   if(this.todos[i].id == id){
+	     this.todos.splice(i, 1);
+	   }
+	 }
+	 
+       };
+       
+     });
+     
+    </script>
+  </head>
+  <body>
+
+    <div class="container" ng-app="todoApp" style="margin-top:10px">
+
+      <h1>Angularでtodoアプリ</h1>
+
+      <div ng-controller="todoListController as listCtrl">
+
+	<ul>
+	  <li>タイトル：<input name="" type="text" value="" ng-model="listCtrl.title"/></li>
+	  <li>内容：<input name="" type="text" value="" ng-model="listCtrl.body"/></li>
+	  <li><button class="btn" ng-click="listCtrl.add()">追加</button></li>
+	</ul>
+	
+	<table class="table">
+	  <tr>
+	    <th>タイトル</th>
+	    <th>内容</th>
+	    <th>完了ボタン</th>
+	  </tr>
+	  <tr ng-repeat="todo in listCtrl.todos">
+	    <td>{{todo.title}}</td>
+	    <td>{{todo.body}}</td>
+	    <td> <button class="btn" ng-click="listCtrl.comp(todo.id)">完了</button> </td>
+	  </tr>
+	</table>
+	
+      </div><!-- ng-controller -->
+      
+    </div>
+    
+  </body>
+</html>
