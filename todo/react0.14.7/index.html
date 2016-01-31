@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.7/react.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.7/react-dom.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    
+    <!-- <script src="https://fb.me/react-0.14.7.min.js"></script>
+    <script src="https://fb.me/react-dom-0.14.7.js"></script> -->
+    <meta charset="UTF-8"/>
+    <title>Document</title>
+  </head>
+  <body>
+
+    <div id="content"></div>
+    
+    <script type="text/babel">
+     var TodoApp = React.createClass({
+       getInitialState: function(){
+	 return{items: []};
+       },
+       
+       updateItems: function(newItem){
+	 var allItems = this.state.items.concat([newItem]);
+	 this.setState({items:allItems});
+
+	 console.log(newItem)
+       },
+
+       render: function(){
+	 return(
+	   <div>
+	   <TodoBanner/>
+	   <TodoList items={this.state.items}/>
+	   <TodoForm onFormSubmit={this.updateItems}/>
+	   </div>
+	 );
+       }
+       
+     });
+
+     var TodoBanner = React.createClass({
+       render: function(){
+	 return(
+	   <h3>TODO</h3>
+	 );
+       }
+     });
+
+     var TodoList = React.createClass({
+       render: function(){
+	 var createItem = function(itemText){
+	   return(
+	     <TodoListItem>{itemText}</TodoListItem>
+	   );
+	 };
+
+	 return <ul>{this.props.items.map(createItem)}</ul>;
+       }
+     });
+
+     var TodoListItem = React.createClass({
+       render: function(){
+	 return(
+	   <li>{this.props.children}</li>
+	 );
+       }
+     });
+
+     var TodoForm = React.createClass({
+       getInitialState: function(){
+	 return {item: ''};
+       },
+       handleSubmit: function(e){
+	 e.preventDefault();
+
+	 var title = ReactDOM.findDOMNode(this.refs.title).value.trim();
+	 var body = ReactDOM.findDOMNode(this.refs.body).value.trim();
+
+	 // XXX: setStateが動かない...
+	 //this.setState({item: title});
+	 /* this.state.item = [{title:title, body:body}];
+	 console.log(this.state.item); */
+	 
+	 this.state.item = title;
+	 console.log(this.state);
+	 this.props.onFormSubmit(this.state.item);
+	 
+	 this.setState({item: ''});
+	 
+	 //ReactDOM.findDOMNode(this.refs.item).focus();
+	 return;
+       },
+
+       /* onChange: function(e){
+       this.setState({
+       item: e.target.value
+       });
+       }, */
+
+       render:function(){
+	 /* return(
+	 <form onSubmit={this.handleSubmit}>
+	 <input type="text" ref="item" onChange={this.onChange} value={this.state.item} />
+	 <input type="submit" value="Add" />
+	 </form>
+	 ); */
+	 return(
+	   <form onSubmit={this.handleSubmit}>
+	   <input type="text" ref="item" ref="title" placeholder="title" />
+	   <input type="text" ref="item" ref="body" placeholder="body" />
+	   <input type="submit" value="post" />
+	   </form>
+	 )
+       }
+       
+     });
+
+     ReactDOM.render(
+       <TodoApp/>,
+       document.getElementById('content')
+     );
+     
+    </script>
+  </body>
+</html>
