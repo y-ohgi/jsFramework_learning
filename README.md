@@ -9,3 +9,5 @@ javascriptフレームワークの学習
 
 ## 使用したフレームワーク
 * angular 1.4.9
+* React 0.14.7
+* jQuery 3.0beta
